@@ -8,6 +8,8 @@ const { PDFDocument } = require("pdf-lib");
 const { sha256 } = require("../utils/hash");
 const Audit = require("../models/audit");
 
+const BASE_URL = "https://signature-editor.onrender.com" || "http://localhost:5001";
+
 router.post("/", async (req, res) => {
   try {
     console.log("Received payload:", req.body);
@@ -32,7 +34,6 @@ router.post("/", async (req, res) => {
     for (const field of fields) {
       const { type, xRatio, yRatio, widthRatio, heightRatio, value } = field;
 
-      // Skip invalid or unplaced fields
       if (
         xRatio == null ||
         yRatio == null ||
@@ -50,7 +51,6 @@ router.post("/", async (req, res) => {
       const x = xRatio * width;
       const y = height - yRatio * height - boxHeight;
 
-      // ---------- TEXT / DATE / RADIO ----------
       if (type === "text" || type === "date" || type === "radio") {
         if (!value) continue;
 
@@ -62,7 +62,6 @@ router.post("/", async (req, res) => {
         });
       }
 
-      // ---------- IMAGE / SIGNATURE ----------
       if (type === "image" || type === "signature") {
         if (!value) continue;
 
@@ -136,9 +135,9 @@ router.post("/", async (req, res) => {
 
     // Respond with URL
     res.json({
-      success: true,
-      signedPdfUrl: `/uploads/signed/signed-${pdfId}`,
-    });
+  success: true,
+  signedPdfUrl: `${BASE_URL}/uploads/signed/signed-${pdfId}`,
+});
   } catch (err) {
     console.error("SIGN PDF ERROR:", err);
     res.status(500).json({

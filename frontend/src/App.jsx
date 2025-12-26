@@ -383,6 +383,14 @@ export default function App() {
 );
     const data = await res.json();
     console.log("Signed PDF:", data);
+    if (data.signedPdfUrl) {
+  const a = document.createElement("a");
+  a.href = data.signedPdfUrl;
+  a.download = "signed-sample.pdf";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
   };
 
   return (
