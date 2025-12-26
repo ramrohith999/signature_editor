@@ -361,23 +361,37 @@ export default function App() {
       alert("Place and resize fields before signing.");
       return;
     }
-    const res = await fetch("http://localhost:5001/sign-pdf", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        pdfId: "sample.pdf",
-        fields: normalizedFields,
-      }),
-    });
+    // const res = await fetch("http://localhost:5001/sign-pdf", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({
+    //     pdfId: "sample.pdf",
+    //     fields: normalizedFields,
+    //   }),
+    // });
+// for render deployment
+    const res = await fetch(
+  "https://signature-editor.onrender.com/sign-pdf",
+  {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      pdfId: "sample.pdf",
+      fields: normalizedFields,
+    }),
+  }
+);
     const data = await res.json();
     console.log("Signed PDF:", data);
   };
 
   return (
-    <div
-      className="min-h-screen bg-cover bg-center bg-no-repeat flex items-start justify-center py-12 relative"
-      style={{ backgroundImage: "url('/src/assets/background.jpg')" }}
-    >
+    // <div
+    //   className="min-h-screen bg-cover bg-center bg-no-repeat flex items-start justify-center py-12 relative"
+    //   style={{ backgroundImage: "url('/src/assets/background.jpg')" }}
+    // >
+// removed background image and stuck to plain bg for better visibility
+    <div className="min-h-screen bg-gray-100 flex items-start justify-center py-12">
       <div className="absolute inset-0 bg-black/30"></div>
       <div className="relative bg-white shadow-xl rounded-xl p-6 w-full max-w-6xl">
         <h1 className="text-2xl italic font-semibold mb-6 text-gray-900">
